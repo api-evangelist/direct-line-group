@@ -106,14 +106,63 @@ findings:
   specsCount: 0
   specsNote: No OpenAPI, Swagger, AsyncAPI, GraphQL SDL or .proto artifact was
     found, so no openapi/ directory was created.
+  enrichmentRound:
+    date: '2026-07-25'
+    note: |
+      Second pass (enrichment pipeline). The "no public API" conclusion stands
+      after a wider hunt, but three things changed.
+
+      1. A second gated API host exists that the first pass missed.
+      api.bymiles.co.uk resolves and is an Amazon API Gateway deployment — the
+      root returns HTTP 403 {"message":"Forbidden"} with x-amzn-errortype
+      ForbiddenException and an x-amz-apigw-id header, and /v1/* returns
+      {"message":"Missing Authentication Token"}. Its certificate is valid
+      (CN=bymiles.co.uk, expires 2026-09-26). It is gated and undocumented, but it
+      confirms a second, AWS-based integration estate alongside the group's
+      MuleSoft gateway. api.darwin.co.uk also resolves to AWS anycast addresses
+      but presents no certificate for that SNI name and cannot be probed.
+
+      2. www.darwin.co.uk is NOT a Direct Line Group property and was recorded in
+      error in the first pass. It serves a one-line HTML redirector to /lander,
+      which forwards to forsale.godaddy.com/forsale/www.darwin.co.uk, and its
+      /llms.txt is a GoDaddy aftermarket for-sale notice. The real Darwin brand
+      site is www.darwin-insurance.com, whose footer states that policies are
+      underwritten by U K Insurance Limited (FCA No. 536726) and arranged and
+      administered by iGO4 Limited. apis.yml has been corrected.
+
+      3. The group privacy notice was located at
+      https://www.brandsprivacypolicy.co.uk/policy — published by U K Insurance
+      Limited and covering Direct Line, Churchill, Privilege, Darwin and Green
+      Flag. www.directline.com/app-privacy-policy 301s to it.
+
+      Everything else re-confirmed negative. Forty-nine /.well-known/ probes across
+      eleven hosts returned zero discovery documents (the HTTP 200s on
+      www.privilege.com and docs.directline.com are soft 404s serving HTML
+      templates, verified by body inspection). No security.txt, no OIDC or OAuth
+      discovery, no api-catalog, no ai-plugin.json. No first-party package on npm,
+      PyPI, Maven Central, NuGet, pkg.go.dev, RubyGems, Packagist or crates.io —
+      npm hits for "direct-line" are all Microsoft Bot Framework Direct Line chat
+      protocol clients, an unrelated namespace collision worth recording. The
+      GitHub organization still has zero public repositories. No vulnerability
+      disclosure programme and no trust center were found by keyword-verified
+      probes of /security, /responsible-disclosure, /vulnerability-disclosure,
+      trust.<domain> and security.<domain> across the estate.
   transports:
   - protocol: REST
     scheme: https
     baseURL: https://api.directlinegroup.co.uk/
     documented: false
     note: MuleSoft Anypoint production load balancer. HTTP 403 at root, expired
-      TLS certificate, client certificate requested during TLS handshake. Not
-      publicly documented and not publicly usable.
+      TLS certificate (expired 2026-06-15), client certificate requested during
+      TLS handshake. Not publicly documented and not publicly usable.
+  - protocol: REST
+    scheme: https
+    baseURL: https://api.bymiles.co.uk/
+    documented: false
+    note: Amazon API Gateway. HTTP 403 {"message":"Forbidden"} at the root and
+      {"message":"Missing Authentication Token"} under /v1/. Valid certificate
+      (CN=bymiles.co.uk). Gated and undocumented. Discovered 2026-07-25 in the
+      enrichment round.
   - protocol: GraphQL
     documented: false
     note: No /graphql surface found on any group or brand host.
@@ -210,7 +259,81 @@ probes:
 - url: https://developer.darwininsurance.com/
   status: 200
   note: Parked domain-for-sale page. darwininsurance.com is NOT a Direct Line
-    Group property; the Darwin brand lives at www.darwin.co.uk.
+    Group property.
+- url: https://www.darwin.co.uk/
+  status: 200
+  date: '2026-07-25'
+  classification: parked domain-for-sale
+  note: CORRECTION to this review's first pass. Serves a one-line HTML redirector
+    to /lander, which forwards to forsale.godaddy.com/forsale/www.darwin.co.uk.
+    Its /llms.txt is a GoDaddy aftermarket for-sale notice. NOT a Direct Line
+    Group property.
+- url: https://www.darwin-insurance.com/
+  status: 200
+  date: '2026-07-25'
+  note: The real Darwin brand site. Footer states policies are underwritten by
+    U K Insurance Limited (FCA No. 536726) and arranged and administered by iGO4
+    Limited. /developers, /api, /partners, /openapi.json, /swagger.json,
+    /api-docs and every /.well-known/ path return 404.
+- url: https://api.bymiles.co.uk/
+  status: 403
+  date: '2026-07-25'
+  note: NEW FINDING. Amazon API Gateway (x-amz-apigw-id, x-amzn-errortype
+    ForbiddenException). Body {"message":"Forbidden"}. Valid certificate
+    CN=bymiles.co.uk expiring 2026-09-26. A second gated integration estate
+    alongside the group's MuleSoft gateway.
+- url: https://api.bymiles.co.uk/v1/openapi.json
+  status: 403
+  date: '2026-07-25'
+  note: Body {"message":"Missing Authentication Token"} — the API Gateway stage
+    exists but no route matches anonymously.
+- url: https://api.darwin.co.uk/
+  status: 0
+  date: '2026-07-25'
+  note: Resolves to AWS anycast addresses 13.248.169.48 and 76.223.54.146 but the
+    TLS handshake fails with "unrecognized name" — no certificate is presented for
+    this SNI name.
+- url: https://www.bymiles.co.uk/partners
+  status: 200
+  date: '2026-07-25'
+  note: By Miles partnerships, brokers and affiliates page. A contact address
+    (partnerships@bymiles.co.uk) only — zero occurrences of "API", no
+    documentation, no self-serve onboarding. The group's only public integration
+    seam.
+- url: https://www.brandsprivacypolicy.co.uk/policy
+  status: 200
+  date: '2026-07-25'
+  note: The U K Insurance Limited group privacy notice covering Direct Line,
+    Churchill, Privilege, Darwin and Green Flag. www.directline.com/app-privacy-policy
+    301s here.
+- url: https://www.directline.com/legal/terms
+  status: 200
+  date: '2026-07-25'
+  note: Website terms of use.
+- url: https://www.directline.com/help
+  status: 200
+  date: '2026-07-25'
+  note: Consumer help centre. No developer or partner support channel exists.
+- url: https://www.directline.com/magazine
+  status: 200
+  date: '2026-07-25'
+  note: Direct Line Magazine — consumer editorial content hub, not an engineering
+    blog.
+- url: https://www.directline.com/llms.txt
+  status: 404
+  date: '2026-07-25'
+  note: No llms.txt on any group host. churchill.com, greenflag.com,
+    bymiles.co.uk, directlineforbusiness.co.uk, darwin-insurance.com and
+    docs.directline.com all 404. The only 200 was the GoDaddy for-sale notice on
+    the non-group www.darwin.co.uk.
+- url: https://www.privilege.com/.well-known/security.txt
+  status: 200
+  date: '2026-07-25'
+  classification: soft 404
+  note: Returns the Privilege marketing HTML template for every /.well-known/
+    path, verified by body inspection. Not a discovery document. Same pattern on
+    docs.directline.com for /.well-known/openid-configuration,
+    /oauth-authorization-server and /api-catalog.
 sources:
 - url: https://www.aviva.com/newsroom/news-releases/2025/07/aviva-completes-acquisition-of-direct-line/
   type: Announcement

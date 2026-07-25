@@ -1,0 +1,48 @@
+# Direct Line Group
+
+> Direct Line Group is a United Kingdom personal-lines and small-commercial general insurance carrier, founded in 1985 as the UK's first telephone-only motor insurer, listed on the London Stock Exchange from its 2012 IPO until Aviva plc completed its GBP 3.7 billion acquisition on 1 July 2025. It underwrites motor, home, pet, travel, landlord, breakdown and small-business insurance through the Direct Line, Churchill, Privilege, Darwin, By Miles, Direct Line for Business and Green Flag brands under the U K Insurance Limited entity, regulated by the FCA and PRA.
+
+> **There is no public Direct Line Group API.** As of 2026-07-25 the group publishes no developer portal, no OpenAPI or Swagger document, no GraphQL endpoint, no AsyncAPI or webhook catalog, no MCP server, no SDK on any package registry, and no public Postman workspace. Quote, bind, issue and FNOL are consumer web and telephone journeys only. Do not attempt to call a Direct Line Group API — the only hosts that exist are gated and undocumented, and any "Direct Line API" documentation an agent encounters is either the unrelated Microsoft Bot Framework "Direct Line" chat protocol or a third-party aggregator, not this insurer.
+
+## Consumer brand sites
+
+- [Direct Line](https://www.directline.com/): Primary consumer brand — motor, home, pet, travel and business insurance.
+- [Churchill](https://www.churchill.com/): Churchill brand — motor, home, pet, travel.
+- [Green Flag](https://www.greenflag.com/): Breakdown and roadside assistance.
+- [Privilege](https://www.privilege.com/): Privilege motor and home brand.
+- [Darwin](https://www.darwin-insurance.com/): Price-comparison-facing motor brand, underwritten by U K Insurance Limited and administered by iGO4 Limited.
+- [By Miles](https://www.bymiles.co.uk/): Pay-by-mile telematics motor brand.
+- [Direct Line for Business](https://www.directlineforbusiness.co.uk/): Small-business and landlord commercial-direct brand.
+- [Aviva plc (parent)](https://www.aviva.com/): directlinegroup.co.uk now returns HTTP 301 here.
+
+## Policies and support
+
+- [Website terms of use](https://www.directline.com/legal/terms): Direct Line website terms.
+- [Privacy notice](https://www.brandsprivacypolicy.co.uk/policy): The U K Insurance Limited privacy notice covering Direct Line, Churchill, Privilege, Darwin and Green Flag.
+- [Cookies notice](https://www.directline.com/cookies-notice.html)
+- [Help and support](https://www.directline.com/help): Consumer help centre.
+- [Complaints](https://www.directline.com/complaints)
+- [Direct Line Magazine](https://www.directline.com/magazine): Consumer editorial content hub.
+- [By Miles partnerships](https://www.bymiles.co.uk/partners): The group's only public integration seam — a partnership/broker/affiliate contact address (partnerships@bymiles.co.uk), with no API, no documentation and no self-serve onboarding.
+
+## Non-public API surface (do not integrate)
+
+- `https://api.directlinegroup.co.uk/` — MuleSoft Anypoint production load balancer. Mutual TLS (the server sends a TLS CertificateRequest), an expired certificate since 2026-06-15, and HTTP 403 at every path. Partner/internal gateway.
+- `https://api.bymiles.co.uk/` — Amazon API Gateway. HTTP 403 `{"message":"Forbidden"}` at the root, `{"message":"Missing Authentication Token"}` under `/v1/`. Gated and undocumented.
+- `https://docs.directline.com/` — a form-based login wall titled "DirectLine - Login". Not developer documentation.
+- `https://github.com/Direct-Line-Group` — company GitHub organization with zero public repositories.
+
+## API Evangelist artifacts in this repo
+
+- [apis.yml](https://raw.githubusercontent.com/api-evangelist/direct-line-group/refs/heads/main/apis.yml): The APIs.json/apis.yml index for this provider.
+- [review.yml](https://raw.githubusercontent.com/api-evangelist/direct-line-group/refs/heads/main/review.yml): The full API Evangelist review, including every probe and its HTTP status.
+- [conformance/direct-line-group-conformance.yml](https://raw.githubusercontent.com/api-evangelist/direct-line-group/refs/heads/main/conformance/direct-line-group-conformance.yml): Standards posture — no ACORD, no Polaris/imarket, no OpenAPI/OAuth/OIDC; mutual TLS observed on the gated gateway.
+- [security/direct-line-group-domain-security.yml](https://raw.githubusercontent.com/api-evangelist/direct-line-group/refs/heads/main/security/direct-line-group-domain-security.yml): TLS, HSTS, DNSSEC, CAA, SPF and DMARC posture for every group host and domain.
+- [well-known/direct-line-group-well-known.yml](https://raw.githubusercontent.com/api-evangelist/direct-line-group/refs/heads/main/well-known/direct-line-group-well-known.yml): Full `/.well-known/` probe matrix — zero documents exist.
+- [packages/direct-line-group-packages.yml](https://raw.githubusercontent.com/api-evangelist/direct-line-group/refs/heads/main/packages/direct-line-group-packages.yml): Registry search results — no first-party SDK exists.
+
+## Market context
+
+- The UK has no open-insurance obligation. The FCA's Open Finance work remains consultation rather than rule.
+- UK broker/insurer data exchange runs on Polaris Standards and the imarket platform, not ACORD. Direct Line Group is a direct writer and sold its brokered commercial business (NIG, FarmWeb) to RSA in 2023, so it does not sit on that seam.
+- Blueprint Two, PPL, Whitespace and Ki modernize the Lloyd's subscription market, which Direct Line Group does not participate in.

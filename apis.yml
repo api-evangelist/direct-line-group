@@ -43,6 +43,14 @@ modified: '2026-07-25'
 specificationVersion: '0.19'
 apis: []
 common:
+- type: DomainSecurity
+  url: security/direct-line-group-domain-security.yml
+  name: Domain security posture
+  description: Probed TLS, HSTS, DNSSEC, CAA, SPF and DMARC for all eleven group
+    hosts and eight domains, including the two gated API hosts. Notable findings —
+    no DNSSEC and no CAA anywhere, privilege.com DMARC is p=none, and the group API
+    host api.directlinegroup.co.uk has served an expired certificate since
+    2026-06-15 while still requiring a client certificate.
 - type: Website
   url: https://www.directline.com/
   name: Direct Line
@@ -63,11 +71,14 @@ common:
   name: Privilege
   description: Privilege consumer brand site. HTTP 200 confirmed 2026-07-25.
 - type: Website
-  url: https://www.darwin.co.uk/
+  url: https://www.darwin-insurance.com/
   name: Darwin
   description: Darwin price-comparison-facing motor brand. HTTP 200 confirmed
-    2026-07-25. Note the unrelated darwininsurance.com is a parked domain-for-sale
-    page and is not a group property.
+    2026-07-25; the footer states policies are underwritten by U K Insurance Limited
+    (FCA No. 536726) and arranged and administered by iGO4 Limited. Corrected on
+    2026-07-25 — the previously recorded www.darwin.co.uk is NOT a group property,
+    because it redirects to forsale.godaddy.com and its /llms.txt is a GoDaddy
+    for-sale notice. darwininsurance.com (no hyphen) is likewise a parked domain.
 - type: Website
   url: https://www.bymiles.co.uk/
   name: By Miles
@@ -91,6 +102,50 @@ common:
     "Direct Line org for all new code Projects" — zero public repositories as of
     2026-07-25; its profile link points at an internal ServiceNow knowledge-base
     article.
+- type: Support
+  url: https://www.directline.com/help
+  name: Help and support
+  description: Consumer help centre covering car, home, pet, travel, life and
+    business cover, plus contact routes. HTTP 200 confirmed 2026-07-25. Consumer
+    support only — there is no developer or partner support channel.
+- type: TermsOfService
+  url: https://www.directline.com/legal/terms
+  name: Website terms of use
+  description: Direct Line website terms of use. HTTP 200 confirmed 2026-07-25.
+- type: PrivacyPolicy
+  url: https://www.brandsprivacypolicy.co.uk/policy
+  name: U K Insurance Limited privacy notice
+  description: The group privacy notice published by U K Insurance Limited, the
+    Direct Line Group underwriting entity, covering the Direct Line, Churchill,
+    Privilege, Darwin and Green Flag brands. www.directline.com/app-privacy-policy
+    redirects here. HTTP 200 confirmed 2026-07-25.
+- type: Blog
+  url: https://www.directline.com/magazine
+  name: Direct Line Magazine
+  description: The group's consumer editorial content hub across car, home, life
+    and pet cover. HTTP 200 confirmed 2026-07-25. Consumer content, not an
+    engineering or API blog.
+- type: Partners
+  url: https://www.bymiles.co.uk/partners
+  name: By Miles partnerships, brokers and affiliates
+  description: The only public integration seam anywhere on the Direct Line Group
+    estate. It is a contact page (partnerships@bymiles.co.uk) with no API, no
+    documentation and no self-serve onboarding — zero occurrences of the word
+    "API" on the page. HTTP 200 confirmed 2026-07-25.
+- type: Conformance
+  url: conformance/direct-line-group-conformance.yml
+  name: Standards conformance posture
+  description: Derived standards posture. No OpenAPI, AsyncAPI, GraphQL, gRPC,
+    OAuth2, OIDC, RFC 9116 or RFC 9457 conformance; no ACORD and no
+    Polaris/imarket reference. Mutual TLS and TLS 1.3 are the only positives, both
+    observed on gated hosts. No Compliance pointer is emitted because the group
+    publishes no trust center or certification list.
+- type: LLMsTxt
+  url: llms/direct-line-group-llms.txt
+  name: llms.txt
+  description: Generated llms.txt. No provider-published llms.txt exists on any
+    group host; the only /llms.txt returning 200 in the probe set was the GoDaddy
+    for-sale notice on the non-group www.darwin.co.uk.
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com

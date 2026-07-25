@@ -1,0 +1,114 @@
+generated: '2026-07-25'
+method: probed
+source: live probes of /.well-known/* on every Direct Line Group brand host, the
+  group API host, the two brand API hosts, and the docs host
+result: none
+note: >-
+  Zero well-known documents exist anywhere on the Direct Line Group estate. Every
+  path either returns HTTP 404 or returns HTTP 200 with the site's own HTML
+  catch-all page (a soft 404) — the 200s on www.privilege.com, www.darwin.co.uk
+  and docs.directline.com are marketing/login HTML, not discovery documents, and
+  were verified by inspecting the response body. No files were saved because none
+  of the responses were a well-known document. No `WellKnown`, `SecurityTxt`,
+  `APICatalog` or `OpenIDConnect` pointer is wired into apis.yml, because none of
+  those artifacts genuinely exists.
+hosts:
+- host: https://www.directline.com
+  documents:
+  - {path: /.well-known/security.txt, status: 404}
+  - {path: /.well-known/openid-configuration, status: 404}
+  - {path: /.well-known/oauth-authorization-server, status: 404}
+  - {path: /.well-known/api-catalog, status: 404}
+  - {path: /.well-known/ai-plugin.json, status: 404}
+- host: https://www.churchill.com
+  documents:
+  - {path: /.well-known/security.txt, status: 404}
+  - {path: /.well-known/openid-configuration, status: 404}
+  - {path: /.well-known/oauth-authorization-server, status: 404}
+  - {path: /.well-known/api-catalog, status: 404}
+  - {path: /.well-known/ai-plugin.json, status: 404}
+- host: https://www.greenflag.com
+  documents:
+  - {path: /.well-known/security.txt, status: 404}
+  - {path: /.well-known/openid-configuration, status: 404}
+  - {path: /.well-known/oauth-authorization-server, status: 404}
+  - {path: /.well-known/api-catalog, status: 404}
+  - {path: /.well-known/ai-plugin.json, status: 404}
+- host: https://www.privilege.com
+  soft_404: true
+  note: Returns HTTP 200 text/html for every /.well-known/ path — the body is the
+    Privilege marketing page template, not a discovery document.
+  documents:
+  - {path: /.well-known/security.txt, status: 200, content_type: text/html, verified: soft-404}
+  - {path: /.well-known/openid-configuration, status: 200, content_type: text/html, verified: soft-404}
+  - {path: /.well-known/oauth-authorization-server, status: 200, content_type: text/html, verified: soft-404}
+  - {path: /.well-known/api-catalog, status: 200, content_type: text/html, verified: soft-404}
+  - {path: /.well-known/ai-plugin.json, status: 200, content_type: text/html, verified: soft-404}
+- host: https://www.darwin-insurance.com
+  note: The real Darwin brand site (underwritten by U K Insurance Limited).
+    /developers, /api, /partners, /swagger.json and /api-docs also return 404.
+  documents:
+  - {path: /.well-known/security.txt, status: 404}
+  - {path: /.well-known/openid-configuration, status: 404}
+  - {path: /.well-known/oauth-authorization-server, status: 404}
+  - {path: /.well-known/api-catalog, status: 404}
+  - {path: /.well-known/ai-plugin.json, status: 404}
+- host: https://www.darwin.co.uk
+  in_group: false
+  soft_404: true
+  note: NOT a Direct Line Group property. Every /.well-known/ path returns HTTP 200
+    with a one-line HTML redirector to /lander, which forwards to
+    forsale.godaddy.com — the domain is listed for sale on GoDaddy's aftermarket.
+    Its /llms.txt (the only real llms.txt found anywhere in this probe set) is a
+    GoDaddy for-sale notice, not group content.
+  documents:
+  - {path: /.well-known/security.txt, status: 200, content_type: text/html, verified: soft-404}
+  - {path: /.well-known/openid-configuration, status: 200, content_type: text/html, verified: soft-404}
+  - {path: /.well-known/oauth-authorization-server, status: 200, content_type: text/html, verified: soft-404}
+  - {path: /.well-known/api-catalog, status: 200, content_type: text/html, verified: soft-404}
+  - {path: /.well-known/ai-plugin.json, status: 200, content_type: text/html, verified: soft-404}
+  - {path: /llms.txt, status: 200, content_type: text/plain, verified: godaddy-for-sale-notice}
+- host: https://www.bymiles.co.uk
+  documents:
+  - {path: /.well-known/security.txt, status: 404}
+  - {path: /.well-known/openid-configuration, status: 404}
+  - {path: /.well-known/oauth-authorization-server, status: 404}
+  - {path: /.well-known/api-catalog, status: 404}
+  - {path: /.well-known/ai-plugin.json, status: 404}
+- host: https://www.directlineforbusiness.co.uk
+  documents:
+  - {path: /.well-known/security.txt, status: 404}
+  - {path: /.well-known/openid-configuration, status: 404}
+  - {path: /.well-known/oauth-authorization-server, status: 404}
+  - {path: /.well-known/api-catalog, status: 404}
+  - {path: /.well-known/ai-plugin.json, status: 404}
+- host: https://api.directlinegroup.co.uk
+  note: MuleSoft Anypoint gateway. Expired certificate, mutual-TLS CertificateRequest,
+    nginx 403 at the root.
+  documents:
+  - {path: /.well-known/security.txt, status: 404}
+  - {path: /.well-known/openid-configuration, status: 404}
+  - {path: /.well-known/oauth-authorization-server, status: 404}
+  - {path: /.well-known/api-catalog, status: 404}
+  - {path: /.well-known/ai-plugin.json, status: 404}
+- host: https://api.bymiles.co.uk
+  note: Amazon API Gateway. Every path returns HTTP 403 {"message":"Forbidden"};
+    no discovery document is reachable anonymously.
+  documents:
+  - {path: /.well-known/security.txt, status: 403}
+  - {path: /.well-known/openid-configuration, status: 403}
+  - {path: /.well-known/oauth-authorization-server, status: 403}
+  - {path: /.well-known/api-catalog, status: 403}
+- host: https://api.darwin.co.uk
+  note: TLS handshake fails (no certificate for this SNI name) — not probeable.
+  documents: []
+- host: https://docs.directline.com
+  soft_404: true
+  note: Login-wall Bootstrap template returned with HTTP 200 for several
+    /.well-known/ paths; body is the "DirectLine - Login" page.
+  documents:
+  - {path: /.well-known/security.txt, status: 404}
+  - {path: /.well-known/openid-configuration, status: 200, content_type: text/html, verified: soft-404}
+  - {path: /.well-known/oauth-authorization-server, status: 200, content_type: text/html, verified: soft-404}
+  - {path: /.well-known/api-catalog, status: 200, content_type: text/html, verified: soft-404}
+  - {path: /.well-known/ai-plugin.json, status: 404}

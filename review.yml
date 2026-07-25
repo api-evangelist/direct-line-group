@@ -1,0 +1,238 @@
+aid: direct-line-group
+name: Direct Line Group
+review:
+  question: Does Direct Line Group expose a public, self-serve developer portal or
+    any documented public insurance API (quote, bind, issue, FNOL)?
+  answer: false
+  date: '2026-07-25'
+  reviewer: API Evangelist
+  homeMarket: United Kingdom
+  tier: carrier-pc
+findings:
+  summary: |
+    Direct Line Group has no public API surface. It is a UK personal-lines
+    carrier that sells direct to consumers by telephone, web and
+    price-comparison website; it has no broker or agency channel to integrate
+    with, and no developer programme.
+
+    The corporate domain is gone. Both directlinegroup.co.uk and
+    www.directlinegroup.co.uk return HTTP 301 to https://www.aviva.com/
+    following completion of Aviva plc's GBP 3.7bn acquisition on 1 July 2025,
+    so every historical /developers, /api, /developer, /partners and
+    /integrations path now terminates at the Aviva homepage rather than at any
+    Direct Line content. No developer.*, developers.* or docs.* host exists in
+    DNS for the corporate domain (NXDOMAIN).
+
+    One API host does exist and it is the single most useful finding here:
+    api.directlinegroup.co.uk resolves to
+    dlg-production-load-balancer.lb.anypointdns.net (a MuleSoft Anypoint
+    Platform production load balancer, IPv4 99.80.112.117 / 54.195.109.167).
+    It is not usable or documented publicly: its TLS certificate has expired,
+    the server requests a client certificate during the TLS handshake
+    (mutual TLS), and the root path returns HTTP 403 Forbidden with an nginx
+    error body. /console, /api, /openapi.json, /swagger.json, /api-docs,
+    /health and /status all return 404. This is an internal and partner
+    integration gateway, not a developer surface.
+
+    Every live consumer brand site — directline.com, churchill.com,
+    greenflag.com, privilege.com, darwin.co.uk, bymiles.co.uk,
+    directlineforbusiness.co.uk — returns HTTP 404 on /developers, /api and
+    /partners. The one nominally interesting host, docs.directline.com, is a
+    login wall: HTTP 200 serving a Bootstrap page titled "DirectLine - Login"
+    with no reference documentation behind it. Under the honest classification
+    it is category (b), a login wall, not a developer portal.
+
+    No OpenAPI or Swagger document was found anywhere. No GraphQL endpoint.
+    No gRPC or .proto. No AsyncAPI, no webhook or event catalog. No public
+    Postman workspace or collection (a Postman public search returned only an
+    unrelated "Customer Direct Group" workspace by a third-party publisher).
+    No /.well-known/openid-configuration and no
+    /.well-known/oauth-authorization-server on any brand host — all 404. No
+    security.txt.
+
+    The company GitHub organization github.com/Direct-Line-Group exists
+    (created 2019-07-03, "Direct Line org for all new code Projects") with
+    zero public repositories; its profile link points at an internal
+    ServiceNow knowledge-base article. Engineering exists; none of it is
+    public.
+
+    Market context: the UK has the FCA and PRA but no open-insurance
+    obligation, and the FCA's Open Finance work remains consultation rather
+    than rule. The UK's real market-wide data and API infrastructure effort is
+    the London Market modernization programme (Blueprint Two, PPL, Whitespace,
+    Ki), which is aimed at brokers and syndicates in the subscription market —
+    a market Direct Line Group does not participate in. Direct Line Group also
+    sold its brokered commercial business (NIG and FarmWeb) to RSA in
+    September 2023, closing the one channel through which broker-standard
+    integration would have run. What remains is a direct-to-consumer carrier
+    whose only external "integration" is price-comparison-website placement,
+    which is a commercial data feed relationship, not a published API.
+  acordPosture: no ACORD reference found
+  acordNote: |
+    No mention of ACORD, AL3, ACORD XML, ACORD certification or NGDS was found
+    on any Direct Line Group or brand property, nor in the group's public
+    material. This is consistent with the UK personal-lines market, where
+    broker/insurer data exchange runs on Polaris Standards and the imarket
+    platform rather than on ACORD — and Direct Line Group is a direct writer
+    that exited the brokered commercial channel with the 2023 NIG/FarmWeb sale
+    to RSA, so it does not sit on that seam either.
+  insuranceVerbs:
+    quote:
+      exposedViaApi: false
+      note: Consumer web and telephone quote journeys only, plus
+        price-comparison-website placement. No documented public quote API.
+    bind:
+      exposedViaApi: false
+      note: No documented public bind API.
+    issue:
+      exposedViaApi: false
+      note: No documented public policy-issue API.
+    fnol:
+      exposedViaApi: false
+      note: Claims are notified by phone and through logged-in customer
+        self-service. No documented public FNOL API.
+  authModel: |
+    No public authentication model is documented because no public API is
+    offered. The only observable signal is at api.directlinegroup.co.uk, where
+    the TLS handshake includes a CertificateRequest — the server asks for a
+    client certificate, indicating mutual TLS for partner and internal
+    consumers. docs.directline.com presents a form-based username/password
+    login wall. No OAuth or OpenID Connect discovery document is served on any
+    brand host.
+  gated: true
+  gatedNote: The only integration surface is partner/internal-gated (mTLS
+    MuleSoft Anypoint gateway plus a form login wall). Nothing is self-serve.
+  openapiHarvested: false
+  specsCount: 0
+  specsNote: No OpenAPI, Swagger, AsyncAPI, GraphQL SDL or .proto artifact was
+    found, so no openapi/ directory was created.
+  transports:
+  - protocol: REST
+    scheme: https
+    baseURL: https://api.directlinegroup.co.uk/
+    documented: false
+    note: MuleSoft Anypoint production load balancer. HTTP 403 at root, expired
+      TLS certificate, client certificate requested during TLS handshake. Not
+      publicly documented and not publicly usable.
+  - protocol: GraphQL
+    documented: false
+    note: No /graphql surface found on any group or brand host.
+  - protocol: gRPC
+    documented: false
+    note: No published .proto or gRPC endpoint.
+  - protocol: WebSocket
+    scheme: wss
+    documented: false
+    note: No WebSocket surface documented.
+  - protocol: Webhooks
+    documented: false
+    note: No event catalog, webhook documentation or AsyncAPI published.
+probes:
+- url: https://www.directlinegroup.co.uk/
+  status: 301
+  redirectTo: https://www.aviva.com/
+  note: Corporate site retired into Aviva after the 1 July 2025 acquisition.
+- url: https://directlinegroup.co.uk/
+  status: 301
+  redirectTo: https://www.aviva.com/
+- url: https://developer.directlinegroup.co.uk
+  status: 000
+  note: DNS NXDOMAIN — host does not exist.
+- url: https://developers.directlinegroup.co.uk
+  status: 000
+  note: DNS NXDOMAIN — host does not exist.
+- url: https://docs.directlinegroup.co.uk
+  status: 000
+  note: DNS NXDOMAIN — host does not exist.
+- url: https://api.directlinegroup.co.uk/
+  status: 403
+  note: Resolves to dlg-production-load-balancer.lb.anypointdns.net (MuleSoft
+    Anypoint). Expired TLS certificate; server sends a TLS CertificateRequest
+    (mTLS); nginx 403 Forbidden body.
+- url: https://api.directlinegroup.co.uk/openapi.json
+  status: 404
+- url: https://api.directlinegroup.co.uk/swagger.json
+  status: 404
+- url: https://api.directlinegroup.co.uk/api-docs
+  status: 404
+- url: https://api.directlinegroup.co.uk/console
+  status: 404
+- url: https://www.directlinegroup.co.uk/developers
+  status: 200
+  note: Redirected cross-domain to https://www.aviva.com/ — the 200 is the Aviva
+    homepage, not a Direct Line developer page.
+- url: https://www.directline.com/
+  status: 200
+  note: Live consumer brand site.
+- url: https://www.directline.com/developers
+  status: 404
+- url: https://www.directline.com/api
+  status: 404
+- url: https://www.directline.com/partners
+  status: 404
+- url: https://www.directline.com/openapi.json
+  status: 404
+- url: https://www.directline.com/swagger.json
+  status: 404
+- url: https://www.directline.com/api-docs
+  status: 404
+- url: https://docs.directline.com/
+  status: 200
+  classification: login wall
+  note: Bootstrap page titled "DirectLine - Login". No reference documentation.
+    Not a developer portal.
+- url: https://www.churchill.com/developers
+  status: 404
+- url: https://www.churchill.com/api/openapi.json
+  status: 404
+- url: https://www.greenflag.com/developers
+  status: 404
+- url: https://www.greenflag.com/partners
+  status: 404
+- url: https://www.greenflag.com/api-docs
+  status: 404
+- url: https://www.directlineforbusiness.co.uk/partners
+  status: 404
+- url: https://www.privilege.com/developers
+  status: 200
+  note: Serves the site's own /404 page.
+- url: https://www.directline.com/.well-known/openid-configuration
+  status: 404
+- url: https://www.greenflag.com/.well-known/openid-configuration
+  status: 404
+- url: https://www.directline.com/.well-known/oauth-authorization-server
+  status: 404
+- url: https://www.directline.com/.well-known/security.txt
+  status: 404
+- url: https://api.github.com/orgs/direct-line-group
+  status: 200
+  note: Organization exists with 0 public repositories.
+- url: https://developer.darwininsurance.com/
+  status: 200
+  note: Parked domain-for-sale page. darwininsurance.com is NOT a Direct Line
+    Group property; the Darwin brand lives at www.darwin.co.uk.
+sources:
+- url: https://www.aviva.com/newsroom/news-releases/2025/07/aviva-completes-acquisition-of-direct-line/
+  type: Announcement
+  note: Aviva completes acquisition of Direct Line, effective 1 July 2025.
+- url: https://en.wikipedia.org/wiki/Direct_Line_Group
+  type: Reference
+  note: Founding 1985, Bromley HQ, brand list, 2012 LSE IPO, ~10,200 employees,
+    PRA/FCA regulation, Aviva acquisition.
+- url: https://nig.com/news/shareholders-approve-rsas-acquisition-of-direct-line-groups-broker-commercial-lines-business/
+  type: Announcement
+  note: Sale of the brokered commercial business (NIG, FarmWeb) to RSA, 2023.
+- url: https://www.polaris.co.uk/products/imarket/
+  type: Reference
+  note: UK broker/insurer data exchange runs on Polaris Standards and imarket,
+    not ACORD — market context for the ACORD finding.
+actions:
+  openapiDirCreated: false
+  apisListed: 0
+  status: built-stub
+  reason: |
+    Identity captured honestly with an empty apis[] block. Direct Line Group
+    publishes no public self-serve API, no developer portal and no
+    machine-readable specification; its only external API host is a
+    partner-gated mTLS MuleSoft gateway returning 403. Recording that absence
+    accurately is the correct outcome for this record.

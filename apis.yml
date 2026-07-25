@@ -1,0 +1,96 @@
+aid: direct-line-group
+url: https://raw.githubusercontent.com/api-evangelist/direct-line-group/refs/heads/main/apis.yml
+name: Direct Line Group
+kind: company
+description: >-
+  Direct Line Group is a United Kingdom personal-lines and small-commercial
+  general insurance carrier, founded in 1985 as the UK's first telephone-only
+  motor insurer and listed on the London Stock Exchange from its 2012 IPO until
+  Aviva plc completed its GBP 3.7 billion acquisition of the group on 1 July
+  2025. The group underwrites motor, home, pet, travel, landlord, breakdown and
+  small-business insurance through the Direct Line, Churchill, Privilege, Darwin,
+  By Miles, Direct Line for Business and Green Flag brands, and is regulated in
+  its home market by the Financial Conduct Authority and the Prudential
+  Regulation Authority. Its distribution is direct-to-consumer via telephone and
+  web plus price-comparison-website placement (notably through the Darwin
+  brand), rather than through broker or agency channels; it sold its brokered
+  commercial business (NIG and FarmWeb) to RSA in September 2023, closing the
+  one channel that would have carried standards-based broker integration. Its
+  API posture is accordingly closed and partner-gated: as of 25 July 2026 the
+  corporate domain directlinegroup.co.uk returns HTTP 301 to aviva.com, there is
+  no developer.*, developers.* or docs.* host in DNS, every consumer brand site
+  returns 404 on /developers, /api and /partners, and the only API host that
+  exists — api.directlinegroup.co.uk, resolving to a MuleSoft Anypoint
+  production load balancer — serves HTTP 403 behind an expired TLS certificate
+  and requests a client certificate during the TLS handshake. There is no public
+  self-serve developer portal, no downloadable OpenAPI, no GraphQL, no published
+  webhook or event catalog, no public Postman workspace, and no ACORD reference
+  anywhere in the group's public material. Quote, bind, issue and FNOL are all
+  consumer web and telephone journeys only.
+image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+tags:
+- Insurance
+- United Kingdom
+- Property and Casualty
+- Personal Lines
+- Motor Insurance
+- Home Insurance
+- Carrier
+- Roadside Assistance
+- Partner Gated
+created: '2026-07-25'
+modified: '2026-07-25'
+specificationVersion: '0.19'
+apis: []
+common:
+- type: Website
+  url: https://www.directline.com/
+  name: Direct Line
+  description: Primary consumer brand site for the group's motor, home, pet, travel
+    and business insurance products. HTTP 200 confirmed 2026-07-25.
+- type: Website
+  url: https://www.churchill.com/
+  name: Churchill
+  description: Churchill consumer brand site (motor, home, pet, travel). HTTP 200
+    confirmed 2026-07-25.
+- type: Website
+  url: https://www.greenflag.com/
+  name: Green Flag
+  description: Green Flag breakdown and roadside-assistance brand site. HTTP 200
+    confirmed 2026-07-25.
+- type: Website
+  url: https://www.privilege.com/
+  name: Privilege
+  description: Privilege consumer brand site. HTTP 200 confirmed 2026-07-25.
+- type: Website
+  url: https://www.darwin.co.uk/
+  name: Darwin
+  description: Darwin price-comparison-facing motor brand. HTTP 200 confirmed
+    2026-07-25. Note the unrelated darwininsurance.com is a parked domain-for-sale
+    page and is not a group property.
+- type: Website
+  url: https://www.bymiles.co.uk/
+  name: By Miles
+  description: By Miles pay-by-mile telematics motor brand. HTTP 200 confirmed
+    2026-07-25.
+- type: Website
+  url: https://www.directlineforbusiness.co.uk/
+  name: Direct Line for Business
+  description: Small-business and landlord commercial-direct brand site. HTTP 200
+    confirmed 2026-07-25.
+- type: Website
+  url: https://www.aviva.com/
+  name: Aviva plc (parent)
+  description: The corporate domain directlinegroup.co.uk and www.directlinegroup.co.uk
+    both return HTTP 301 to https://www.aviva.com/ following completion of Aviva's
+    acquisition on 1 July 2025.
+- type: GitHubOrganization
+  url: https://github.com/Direct-Line-Group
+  name: Direct-Line-Group
+  description: Company GitHub organization, created 2019-07-03, described as
+    "Direct Line org for all new code Projects" — zero public repositories as of
+    2026-07-25; its profile link points at an internal ServiceNow knowledge-base
+    article.
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com
